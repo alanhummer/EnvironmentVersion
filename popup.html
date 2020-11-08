@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Environment Version</title>
+		<!-- For the Jira app --> 
+		<script src="popup.js"></script>
+		<style type="text/css">
+			body {
+				margin: 0;
+				width: 770px;
+				height: 570px; /*Max window wize for exension is 800X600.  But scrollbars add 30px each way - not need horizontally.*/
+			}
+			.query-display {
+				height: 20px;	
+				padding: 10px;
+				color: blue;
+				font-weight: bold;	
+				font-size: 16px;
+				text-align: center;
+			}
+			.issuteTitle {
+				line-height: 9px;
+				text-align: center;
+			}
+			.issueDetail {
+				line-height: 9px;
+				text-align: left;
+			}
+			.enabled-image {
+				opacity: 0.5;
+			}
+
+			.enabled-image:hover {
+				opacity: 1.0;
+				cursor: pointer;
+			}
+
+			.disabled-image {
+				opacity: 0.5;
+			}
+
+			.disabled-image:hover {
+				opacity: 0.5;
+			}
+			.table-clean {
+				padding: 0px;
+				width: 100%;
+				border: 0px;
+				text-align: left;
+				vertical-align: bottom;
+			}
+		</style>
+	</head>
+	<body>
+		<!--The Query Input Section -->
+		<div id="notice"></div>
+		<div id="query-input" class="query-display" style="display: inline-block;">
+			<div style="text-align:right;float:right;width: 200;" id="nav">
+				<a  id="closeLink" target="_blank"><img id="close-image" class="enabled-image" style="float: right;" src="images/close_button.png" height="33" /></a>
+				<a id="helpLink" target="_blank"><img id="help-image" class="enabled-image" style="float: right;" src="images/help_button.png" height="33" /></a>
+			</div>
+			<div id="query-input-prompt">
+				<table class="table-clean">
+					<tr>
+						<td style="text-align:right;width:50%">Push this button to see Environment Versions!</td>
+						<td style="text-align:left;width:50%"><a  id="runquery" target="_blank"><img id="go-image" class="enabled-image" style="float: left;" src="images/go_button.png" height="33" /></a></td>
+					</tr>
+				</table>
+			<br>
+		</div>
+		<!--The Results Section -->
+		<div id="output-report">
+			<div id="output-status"></div>
+			<div id="output-log"></div>
+		</div>
+		<div id="output-record-_DOMAIN_" style="color:green;display: none; text-align:left; vertical-align:bottom;">_GROUP_:_DOMAIN_ = _STATUS_<br>
+			<div id="output-details-_DOMAIN_" style="color:green;display:none; text-align:left; vertical-align:bottom;">
+				<table>
+					<tr><td style="color:blue;text-align:right;">Front End Build Time:</td><td style="color:red;text-align:left;"> _BUILDTIME_</td></tr>
+					<tr><td style="color:blue;text-align:right;">Front End Version:</td><td style="color:red;text-align:left;"> _FRONTENDVERSION_</td></tr>
+					<tr><td style="color:blue;text-align:right;">Front End Shared Version:</td><td style="color:red;text-align:left;"> _FRONTENDVERSIONSHARED_</td></tr>		
+					<tr><td style="color:blue;text-align:right;">Legacy CO IC_Web Version:</td><td style="color:red;text-align:left;"> _LEGACYCOICWEB_</td></tr>
+					<tr><td style="color:blue;text-align:right;">Legacy CO Server Date:</td><td style="color:red;text-align:left;"> _LEGACYCOSERVERDATE_</td></tr>
+					<tr><td style="color:blue;text-align:right;">New CO Build Date:</td><td style="color:red;text-align:left;"> _NEWCOBUILDDATE_</td></tr>		
+					<tr><td style="color:blue;text-align:right;">New CO Build:</td><td style="color:red;text-align:left;"> _NEWCOBUILD_</td></tr>		
+				</table>	
+			</div><br>
+		</div>
+		<br>
+	</body>
+</html>

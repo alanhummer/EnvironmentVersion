@@ -1,0 +1,23 @@
+{
+    "urlOfTester": "http://localhost/getVersion.asp?domain=_DOMAIN_",
+    "domainsToGet": [
+        {"domain": "www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
+        {"domain": "origin-aws-useast-1-www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
+        {"domain": "origin-aws-uswest-2-www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
+        {"domain": "origin-d1-www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
+        {"domain": "le-qasa-aws.landsend.com", "group": "<font color='black'>AWS Release Stack</font>"},
+        {"domain": "le-intc-aws.landsend.com", "group": "<font color='black'>AWS Release Stack</font>"},
+        {"domain": "le-deva-aws.landsend.com", "group": "<font color='black'>AWS Release Stack</font>"},
+        {"domain": "le-devc-aws.landsend.com", "group": "<font color='black'>AWS Release Stack</font>"},
+        {"domain": "le-dev-a.landsend.com", "group": "<font color='red'>B6 Release Stack</font>"},
+        {"domain": "le-dev-c.landsend.com", "group": "<font color='red'>B6 Release Stack</font>"},
+        {"domain": "le-int-c.landsend.com", "group": "<font color='red'>B6 Release Stack</font>"},
+        {"domain": "le-qas-a.landsend.com", "group": "<font color='red'>B6 Release Stack</font>"},
+        {"domain": "le-int-a.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font>"},
+        {"domain": "le-tst-2.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font>"},
+        {"domain": "le-dev-b.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font> Feature Stacks"},
+        {"domain": "le-int-b.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font>"},
+        {"domain": "le-tst-1.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font>"},
+        {"domain": "le-tst-3.landsend.com", "group": "<font color='black'>B6 Feature Stacks</font>"}
+    ]
+}
