@@ -1,5 +1,5 @@
 {
-    "urlOfTester": "http://localhost/getVersion.asp?domain=_DOMAIN_",
+    "urlOfTester": "http://uslt103301.leinternal.com/getVersion.asp?domain=_DOMAIN_",
     "domainsToGet": [
         {"domain": "www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
         {"domain": "origin-aws-useast-1-www.landsend.com", "group": "<font color='red'>Prod Site</font>"},
