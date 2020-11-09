@@ -28,7 +28,6 @@ function onDOMContentLoaded() {
             var docID = "output-record-" + domainToRun.domain;
             outputRecord = outputRecord.replace(/_DOMAIN_/gi, domainToRun.domain);
             outputRecord = outputRecord.replace(/_GROUP_/gi, domainToRun.group);
-            console.log("RECORD IS: " + outputRecord);
             document.getElementById("output-log").innerHTML = document.getElementById("output-log").innerHTML + outputRecord;
             document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_STATUS_", "Ready...");
         });        
@@ -83,7 +82,8 @@ function getVersions() {
 
     //for each URL inc config
     config.domainsToGet.forEach(function(domainToRun) {
-        getVersion(domainToRun.domain);
+        domainToRun.tries = 0;
+        getVersion(domainToRun);
     });
 
 }
@@ -93,16 +93,16 @@ function getVersions() {
 function getVersion(inputDomain) {
     
     var urlToRun = "";
-    var docID = "output-record-" + inputDomain;
-    var detailID = "output-details-" + inputDomain;
+    var docID = "output-record-" + inputDomain.domain;
+    var detailID = "output-details-" + inputDomain.domain;
 
      //Send EMail
-    if (inputDomain.length > 0) {
+    if (inputDomain.domain.length > 0) {
 
         document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Ready...", "Running...");
 
         //Replace our tags
-        urlToRun = config.urlOfTester.replace("_DOMAIN_", inputDomain);
+        urlToRun = config.urlOfTester.replace("_DOMAIN_", inputDomain.domain);
 
         //Convert to encoded from data for posting
         //urlEncodedData = encodeURIComponent(config.orgEmailConfig.emailSubject) + "=" + encodeURIComponent(inputSubject)
@@ -112,18 +112,24 @@ function getVersion(inputDomain) {
 
         //Try to send
         try {
+
+            //Increment out # of attempts
+            inputDomain.tries = inputDomain.tries + 1;
+
+            //Build our object set
             var xhr = new XMLHttpRequest();
             xhr.open("GET", urlToRun, true);
+
             //xhr.setRequestHeader( 'Content-Type', 'application/json' );
             //xhr.setRequestHeader( 'Content-Type', 'application/json' );
 
             xhr.responseType = 'json';
-            xhr.addEventListener("error", function() {console.log("Environment Version - Failed - " + inputDomain);});
+            xhr.addEventListener("error", function() {console.log("Environment Version - Failed - " + inputDomain.domain);});
             xhr.onload = function() {
                 var status = xhr.status;
                 if (status == 200) {
                     //successful
-                    console.log("Environment Version - Succeeded - " + inputDomain);
+                    console.log("Environment Version - Succeeded - " + inputDomain.domain);
                     console.log("Environment Version response 2:" + xhr.response);
                     console.log(xhr);
                     //Add it to the output report
@@ -142,16 +148,22 @@ function getVersion(inputDomain) {
                     //document.getElementById("output-log").innerHTML = document.getElementById("output-log").innerHTML + xhr.response.domain + " = " + xhr.response.buildTime + "<br>"
                 } 
                 else {
-                    //Failed
-                    console.log("Environment Version - Failed - " + inputDomain);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Took Error: " + status + " = " + xhr.statusText);
-                }
+                    if (inputDomain.tries < 3) {
+                        console.log("Trying Again - " + inputDomain.domain + " tries = " + inputDomain.tries);
+                        getVersion(inputDomain);
+                    }
+                    else {
+                        //Failed
+                        console.log("Environment Version - Failed - " + inputDomain.domain);
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Took Error: " + status + " = " + xhr.statusText);
+                    }
+                 }
             };        
             xhr.send();       
             console.log("Environment Version response 1:" + xhr.response);
         }
         catch(err) {
-            console.log("Environment Version - Failed - " + inputDomain);
+            console.log("Environment Version - Failed - " + inputDomain.domain);
         }
     }
 
