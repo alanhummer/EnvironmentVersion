@@ -2,34 +2,24 @@
 <html>
 	<head>
 		<title>Environment Version</title>
-		<!-- For the Jira app --> 
-		<script src="popup.js"></script>
+		<script src="popup.js"></script>		
 		<style type="text/css">
 			body {
 				margin: 0;
 				width: 770px;
 				height: 570px; /*Max window wize for exension is 800X600.  But scrollbars add 30px each way - not need horizontally.*/
 			}
-			.query-display {
+			.header-display {
 				height: 20px;	
 				padding: 10px;
-				color: blue;
+				color: black;
 				font-weight: bold;	
 				font-size: 16px;
 				text-align: center;
 			}
-			.issuteTitle {
-				line-height: 9px;
-				text-align: center;
-			}
-			.issueDetail {
-				line-height: 9px;
-				text-align: left;
-			}
 			.enabled-image {
 				opacity: 0.5;
 			}
-
 			.enabled-image:hover {
 				opacity: 1.0;
 				cursor: pointer;
@@ -49,43 +39,74 @@
 				text-align: left;
 				vertical-align: bottom;
 			}
+			.issue-group {
+				padding: 10px;
+				width: 95%;
+				border: 10px;
+				font-weight: bold;	
+				font-size: 16px;
+				text-align: left;
+				vertical-align: bottom;
+			}
+			.summary-class {
+				background-color:#D5DBDB;
+				color:red;
+				display: inline-block; 
+				text-align:left;
+				border:10px;
+				box-shadow: 1px 1px 2px #bbbbbb;
+				cursor: pointer;
+				padding: 10px;
+				width: 100%;
+			}
 		</style>
 	</head>
 	<body>
-		<!--The Query Input Section -->
+		<!--The Header Input Section -->
 		<div id="notice"></div>
-		<div id="query-input" class="query-display" style="display: inline-block;">
-			<div style="text-align:right;float:right;width: 200;" id="nav">
+		<div id="header-input" class="header-display" style="display: inline-block;">
+			<div style="text-align:right;float:right;width: 750px;" id="nav">
 				<a  id="closeLink" target="_blank"><img id="close-image" class="enabled-image" style="float: right;" src="images/close_button.png" height="33" /></a>
-				<a id="helpLink" target="_blank"><img id="help-image" class="enabled-image" style="float: right;" src="images/help_button.png" height="33" /></a>
 			</div>
-			<div id="query-input-prompt">
+			<div id="header-message">
 				<table class="table-clean">
 					<tr>
-						<td style="text-align:right;width:50%">Push this button to see Environment Versions!</td>
-						<td style="text-align:left;width:50%"><a  id="runquery" target="_blank"><img id="go-image" class="enabled-image" style="float: left;" src="images/go_button.png" height="33" /></a></td>
+						<td style="text-align:center;width:100%">This application gives you versioning and status information on our environments</td>
 					</tr>
 				</table>
-			<br>
+			</div><br>
+			<a  id="refresh" target="_blank"><img id="refresh-image" class="enabled-image" style="float: center;" src="images/click-to-refresh.png" height="33" /></a>
 		</div>
+		
 		<!--The Results Section -->
 		<div id="output-report">
 			<div id="output-status"></div>
 			<div id="output-log"></div>
 		</div>
-		<div id="output-record-_DOMAIN_" style="color:green;display: none; text-align:left; vertical-align:bottom;">_GROUP_: _DOMAIN_ = _STATUS_<br>
-			<div id="output-details-_DOMAIN_" style="color:green;display:none; text-align:left; vertical-align:bottom;">
-				<table>
-					<tr><td style="color:blue;text-align:right;">Front End Build Time:</td><td style="color:red;text-align:left;"> _BUILDTIME_</td></tr>
-					<tr><td style="color:blue;text-align:right;">Front End Version:</td><td style="color:red;text-align:left;"> _FRONTENDVERSION_</td></tr>
-					<tr><td style="color:blue;text-align:right;">Front End Shared Version:</td><td style="color:red;text-align:left;"> _FRONTENDVERSIONSHARED_</td></tr>		
-					<tr><td style="color:blue;text-align:right;">Legacy CO IC_Web Version:</td><td style="color:red;text-align:left;"> _LEGACYCOICWEB_</td></tr>
-					<tr><td style="color:blue;text-align:right;">Legacy CO Server Date:</td><td style="color:red;text-align:left;"> _LEGACYCOSERVERDATE_</td></tr>
-					<tr><td style="color:blue;text-align:right;">New CO Build Date:</td><td style="color:red;text-align:left;"> _NEWCOBUILDDATE_</td></tr>		
-					<tr><td style="color:blue;text-align:right;">New CO Build:</td><td style="color:red;text-align:left;"> _NEWCOBUILD_</td></tr>		
-				</table>	
-			</div><br>
+
+		<!--Each group-->
+		<div id="output-_GROUP_" style="display:none;">
+			<div id="output-title-_GROUP_" class="issue-group">&nbsp;_GROUP_</div>
+			_DOMAINS_
+			<hr>
 		</div>
-		<br>
+		<!--End Group-->
+
+		<!--Each Domain-->
+		<details closed id="output-record-_DOMAIN_"  class="issue-group" style="display:none;">
+			<summary id="output-summary-_DOMAIN_" class="summary-class" style="color:_ENVSTATUSCOLOR_">_DOMAIN_ _STATUSMESSAGE_</summary>
+			<div id="output-details-_DOMAIN_" style="text-align:left; vertical-align:bottom;width:100%">
+				<table cellpadding="5px" width="100%">
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Build Time:</td><td style="color:white;text-align:left;background-color:#EC7063"> _BUILDTIME_</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> _FRONTENDVERSION_</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Shared Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> _FRONTENDVERSIONSHARED_</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Legacy CO IC_Web Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> _LEGACYCOICWEB_</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Legacy CO Server Date:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> _LEGACYCOSERVERDATE_</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">New CO Build Date:</td><td style="color:white;text-align:left;background-color:#A569BD"> _NEWCOBUILDDATE_</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">New CO Build:</td><td style="color:white;text-align:left;background-color:#A569BD"> _NEWCOBUILD_</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:black">STATUS:</td><td style="color:white;text-align:left;background-color:black">_ENVSTATUS_ : _STATUSDATE_ </td></tr>					
+				</table>	
+			</div>
+		</details>
 	</body>
 </html>

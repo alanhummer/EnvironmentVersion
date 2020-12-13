@@ -2,7 +2,8 @@
 This JS is the main processing set - when DOM loaded, code is fired to prmopt for pushing the button
 ****************/ 
 var config;  //object that will hold all configuration options
-
+var blnStatusLoaded = false;
+var statusArray;
 
 //And so we begin....
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded, false);
@@ -14,27 +15,17 @@ function onDOMContentLoaded() {
     
     //Initialize the view
     document.getElementById("close-image").addEventListener ("click", function(){ closeit()}); 
-    document.getElementById("help-image").addEventListener ("click", function(){ openHelp()}); 
-
+    document.getElementById("refresh-image").addEventListener ("click", function(){ refreshit()}); 
     
     loadConfig("ev.json", function(response) { 
 
         //Get all of our config parameters
         config = JSON.parse(response); 
 
-        config.domainsToGet.forEach(function(domainToRun) {
-            var outputRecord = document.getElementById("output-record-_DOMAIN_").outerHTML;
-            outputRecord = outputRecord.replace(/display: none;/gi, "display: block;");
-            var docID = "output-record-" + domainToRun.domain;
-            outputRecord = outputRecord.replace(/_DOMAIN_/gi, domainToRun.domain);
-            outputRecord = outputRecord.replace(/_GROUP_/gi, domainToRun.group);
-            document.getElementById("output-log").innerHTML = document.getElementById("output-log").innerHTML + outputRecord;
-            document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_STATUS_", "Ready...");
-        });        
+        //Get our statuses first
+        step1LoadStatus();    
               
     });
-
-    document.getElementById("go-image").addEventListener ("click", function(){ getVersions()}); 
 
 }
 
@@ -70,45 +61,191 @@ function closeit(){
     return false; //This causes the href to not get invoked
 }
 
-//Open Help
-function openHelp(){
 
-    alert("Not ready yet....");
+//Refresh the window when clicked
+function refreshit(){
+
+    window.location.reload(false);
     return false; //This causes the href to not get invoked
 }
 
-//Get Version
-function getVersions() {
 
-    //for each URL inc config
+//Load the Status
+function step1LoadStatus(inputDomain) {
+
+    //Try to send
+    try {
+
+        //Build our object set
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", config.urlOfStatus, true);
+        xhr.responseType = 'json';
+        xhr.addEventListener("error", function() {console.log("Environment Version - Failed - Loading Statuses");});
+        xhr.onload = function() {
+            var status = xhr.status;
+            if (status == 200) {
+                //successful
+                //We got it, set the array
+                statusArray = xhr.response;
+
+                //Get the most reacent for each domain
+                statusArray.forEach(function(statusElement1) {
+                    statusArray.forEach(function(statusElement2) {
+                        if (statusElement1.host == statusElement2.host) {
+                            //We hve a match, choose the most recent
+                            if (statusElement1.id == statusElement2.id) {
+                                //Its the same one, skip it
+                            }
+                            else {
+                                var statusDate1 = new Date(statusElement1.insertDate);
+                                var statusDate2 = new Date(statusElement2.insertDate);
+                                if (statusDate2 > statusDate1) {
+                                    //set the most recent
+                                    statusElement2.mostRecent = true;
+                                    statusElement1.mostRecent = false;
+                                }
+                                else {
+                                    //set the most recent
+                                    statusElement1.mostRecent = true;
+                                    statusElement2.mostRecent = false;                                   
+                                }
+                            }
+                        }
+                    });               
+                });
+
+                //Now step 1 - load domains
+                step2ProcessURLs();
+            }
+            else {
+                //Failed
+                console.log("Environment Version - Failed - Loading Statuses");
+            }
+        };        
+        xhr.send();       
+    }
+    catch(err) {
+        console.log("Environment Version - Failed - Loading Statuses");
+    }
+
+    return;
+
+}
+
+//Load Domains
+function step2ProcessURLs() {
+
+    var saveGroup = "";
+    var outputGroup = "";
+    var HTMLToLoad = "";
+    var fullOutputHTML = "";
+    var groupDomainOuput= "";
+
     config.domainsToGet.forEach(function(domainToRun) {
-        domainToRun.tries = 0;
-        getVersion(domainToRun);
+        if (domainToRun.runit) {
+            //If same group, us that one        
+            if (domainToRun.group != saveGroup) {
+                //if not the first, write it out
+                if (saveGroup != "") {
+                    //if not the first, write it out
+                    HTMLToLoad = HTMLToLoad.replace(/_DOMAINS_/gi, groupDomainOuput);
+                    fullOutputHTML = fullOutputHTML + HTMLToLoad;
+                }
+                saveGroup = domainToRun.group;
+                groupDomainOuput = "";
+                HTMLToLoad = "";
+
+                //Load new group
+                outputGroup = document.getElementById("output-_GROUP_").outerHTML;
+                HTMLToLoad = outputGroup.replace(/_GROUP_/gi, domainToRun.group);
+                HTMLToLoad = HTMLToLoad.replace(/display:none;/gi, "display:block;");
+            }
+
+            //Get a new DOMAIN set and fill it in
+            var outputDomain = document.getElementById("output-record-_DOMAIN_").outerHTML;
+            outputDomain = outputDomain.replace(/_DOMAIN_/gi, domainToRun.domain);
+            outputDomain = outputDomain.replace(/display:none;/gi, "display:block;");
+
+            //if we are doing statuses
+            if (domainToRun.doStatus) {
+                //Fill in the status
+                outputDomain = outputDomain.replace(/_STATUSMESSAGE_/gi, "Checkout Status: _ENVSTATUS_ as of  _STATUSDATE_");
+                
+                statusArray.forEach(function(statusElement) {
+                    if (statusElement.mostRecent) {
+                        if (statusElement.host.toUpperCase() == domainToRun.domain.replace(".landsend.com", "").toUpperCase()) {
+                            //Its a match, lest update status
+                            outputDomain = outputDomain.replace(/_ENVSTATUS_/gi, statusElement.status);
+                            outputDomain = outputDomain.replace(/_STATUSDATE_/gi, statusElement.insertDate);
+                            switch (statusElement.status) {
+                                case "UP":
+                                    outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "green");
+                                default:
+                                    outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "red");
+                            }
+                        }
+                    }
+                });
+
+                //Overload if not status found
+                outputDomain = outputDomain.replace(/_ENVSTATUS_/gi, "Unkown");
+                outputDomain = outputDomain.replace(/_STATUSDATE_/gi, "Right Now");
+                outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "black");
+            }
+            else {
+                  //Overload if not status found
+                  outputDomain = outputDomain.replace(/_STATUSMESSAGE_/gi, "");
+                  outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "black");
+                  outputDomain = outputDomain.replace(/_ENVSTATUS_/gi, "");
+                  outputDomain = outputDomain.replace(/_STATUSDATE_/gi, "--");
+            }
+ 
+            groupDomainOuput = groupDomainOuput + outputDomain; 
+
+        }
+    });   
+
+    //We have build all of the HTML, write it out
+    if (HTMLToLoad != "") {
+        //Last one
+        HTMLToLoad = HTMLToLoad.replace(/_DOMAINS_/gi, groupDomainOuput);
+        fullOutputHTML = fullOutputHTML + HTMLToLoad;
+    }
+
+    //Here is where we write it out
+    document.getElementById("output-log").innerHTML = document.getElementById("output-log").innerHTML + fullOutputHTML;
+
+    //Now add the expand event listeners - of which our env lookup follows
+    config.domainsToGet.forEach(function(domainToRun) {
+        if (domainToRun.runit) {
+            document.getElementById("output-record-" + domainToRun.domain).addEventListener("click", () => {
+                //if opening it up (currently closed), the go get em
+                if (!document.getElementById("output-record-" + domainToRun.domain).open) {
+                    if (!domainToRun.gotEnvInfo) {
+                        step3GetEnvInfo(domainToRun);
+                    }
+                }                
+            });
+        }
     });
 
 }
 
-
-//Get Version
-function getVersion(inputDomain) {
+//Get Environment info
+function step3GetEnvInfo(inputDomain) {
     
     var urlToRun = "";
     var docID = "output-record-" + inputDomain.domain;
     var detailID = "output-details-" + inputDomain.domain;
 
-     //Send EMail
+     //Get the info for the domain
     if (inputDomain.domain.length > 0) {
 
-        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Ready...", "Running...");
+        //We got it so let us know
+        inputDomain.gotEnvInfo = true;
 
         //Replace our tags
         urlToRun = config.urlOfTester.replace("_DOMAIN_", inputDomain.domain);
-
-        //Convert to encoded from data for posting
-        //urlEncodedData = encodeURIComponent(config.orgEmailConfig.emailSubject) + "=" + encodeURIComponent(inputSubject)
-
-        //URL encode it
-        //urlEncodedData = urlEncodedData.replace( /%20/g, '+' );
 
         //Try to send
         try {
@@ -120,18 +257,11 @@ function getVersion(inputDomain) {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", urlToRun, true);
 
-            //xhr.setRequestHeader( 'Content-Type', 'application/json' );
-            //xhr.setRequestHeader( 'Content-Type', 'application/json' );
-
             xhr.responseType = 'json';
             xhr.addEventListener("error", function() {console.log("Environment Version - Failed - " + inputDomain.domain);});
             xhr.onload = function() {
                 var status = xhr.status;
                 if (status == 200) {
-                    //successful
-                    console.log("Environment Version - Succeeded - " + inputDomain.domain);
-                    console.log("Environment Version response 2:" + xhr.response);
-                    console.log(xhr);
                     //Add it to the output report
 
                     document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Done");
@@ -144,23 +274,30 @@ function getVersion(inputDomain) {
                     document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILDDATE_", xhr.response.newCOBuildDate);
                     document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILD_", xhr.response.newCOBuild);
 
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace(/display:none;/gi, "display: block;");
-                    //document.getElementById("output-log").innerHTML = document.getElementById("output-log").innerHTML + xhr.response.domain + " = " + xhr.response.buildTime + "<br>"
                 } 
                 else {
                     if (inputDomain.tries < 3) {
-                        console.log("Trying Again - " + inputDomain.domain + " tries = " + inputDomain.tries);
-                        getVersion(inputDomain);
+                        console.log("Environment Version - Failed Request - Trying Again - " + inputDomain.domain + " tries = " + inputDomain.tries);
+                        step3GetEnvInfo(inputDomain);
                     }
                     else {
                         //Failed
                         console.log("Environment Version - Failed - " + inputDomain.domain);
                         document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Took Error: " + status + " = " + xhr.statusText);
+
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_BUILDTIME_", "Error");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSION_", "Error");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSIONSHARED_", "Error");
+    
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOICWEB_", "Error");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOSERVERDATE_", "Error");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILDDATE_", "Error");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILD_", "Error");
+ 
                     }
                  }
             };        
             xhr.send();       
-            console.log("Environment Version response 1:" + xhr.response);
         }
         catch(err) {
             console.log("Environment Version - Failed - " + inputDomain.domain);
@@ -170,3 +307,4 @@ function getVersion(inputDomain) {
     return;
 
 }
+
