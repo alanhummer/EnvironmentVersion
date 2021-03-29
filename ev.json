@@ -1,5 +1,5 @@
 {
-    "urlOfTester": "http://uslt103301.leinternal.com/getVersion.asp?domain=_DOMAIN_",
+    "urlOfTester": "http://uslt103301.leinternal.com/getVersion2.asp?domain=_DOMAIN_",
     "urlOfStatus": "http://uslt103301/proxy-relay.asp?relayURI=http%3A%2F%2Fleusnudev01%3A8080%2Fcheckout-status%3Fdays%3D0%26hours%3D24",
     "domainsToGet": [
         {"domain": "www.landsend.com", "group": "Production Sites", "runit": true, "doStatus": false},

@@ -95,15 +95,24 @@
 		<!--Each Domain-->
 		<details closed id="output-record-_DOMAIN_"  class="issue-group" style="display:none;">
 			<summary id="output-summary-_DOMAIN_" class="summary-class" style="color:_ENVSTATUSCOLOR_">_DOMAIN_ _STATUSMESSAGE_</summary>
-			<div id="output-details-_DOMAIN_" style="text-align:left; vertical-align:bottom;width:100%">
-				<table cellpadding="5px" width="100%">
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Build Time:</td><td style="color:white;text-align:left;background-color:#EC7063"> _BUILDTIME_</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> _FRONTENDVERSION_</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Front End Shared Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> _FRONTENDVERSIONSHARED_</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Legacy CO IC_Web Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> _LEGACYCOICWEB_</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Legacy CO Server Date:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> _LEGACYCOSERVERDATE_</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">New CO Build Date:</td><td style="color:white;text-align:left;background-color:#A569BD"> _NEWCOBUILDDATE_</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">New CO Build:</td><td style="color:white;text-align:left;background-color:#A569BD"> _NEWCOBUILD_</td></tr>		
+			<div id="output-details-_DOMAIN_" style="text-align:left; vertical-align:bottom;width:100%;">
+				<table cellpadding="5px" width="100%" style="display:none;">
+					<tr><td colspan="2">PRODUCT - _DOMAIN_ Running...</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Time:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.build.com</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.build.version</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#EC7063">Commit Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.commit.id.abbrev / versions.ic_content_display_web_version.product_git.commit.id.full</td></tr>
+					<tr><td colspan="2">BASKET - _DOMAIN_ Running...</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Time:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.build.com</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.build.version</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Commit Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.commit.id.abbrev / versions.ic_content_display_web_version.basket_git.commit.id.full</td></tr>
+					<tr><td colspan="2">FRONT-END - _DOMAIN_ Running...</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">PDP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"> versions.ic_web_front_end_version_pdp</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">PMP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"> versions.ic_web_front_end_version_pmp</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">Basket Version:</td><td style="color:white;text-align:left;background-color:#A569BD"> versions.ic_web_front_end_version_basket</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#A569BD">My Account Version:</td><td style="color:white;text-align:left;background-color:#A569BD"> versions.ic_web_front_end_version_myaccount</td></tr>		
+					<tr><td colspan="2">MISC - _DOMAIN_ Running...</td></tr>
+					<tr><td style="color:white;text-align:right;background-color:#1e3ab4">FE Secure Checkout Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"> versions.ic_web_fe_secure_checkout_version</td></tr>		
+					<tr><td style="color:white;text-align:right;background-color:#1e3ab4">IC_Web Tar Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"> versions.ic_web_tar_version</td></tr>		
 					<tr><td style="color:white;text-align:right;background-color:black">STATUS:</td><td style="color:white;text-align:left;background-color:black">_ENVSTATUS_ : _STATUSDATE_ </td></tr>					
 				</table>	
 			</div>

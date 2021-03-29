@@ -263,17 +263,29 @@ function step3GetEnvInfo(inputDomain) {
                 var status = xhr.status;
                 if (status == 200) {
                     //Add it to the output report
+                    document.getElementById(detailID).style.display =  'block';
 
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Done");
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_BUILDTIME_", xhr.response.buildTime);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSION_", xhr.response.frontEnd);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSIONSHARED_", xhr.response.frontEndShared);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace(/Running.../g, "Done");
 
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOICWEB_", xhr.response.legacyCOICWeb);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOSERVERDATE_", xhr.response.legacyCOServerDate);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILDDATE_", xhr.response.newCOBuildDate);
-                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILD_", xhr.response.newCOBuild);
 
+
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_product.git.build.com", xhr.response.versions.ic_content_display_web_version_product['git.build.time']).replace("T", " ");
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_product.git.build.version", xhr.response.versions.ic_content_display_web_version_product['git.build.version']);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_product.git.commit.id.abbrev", xhr.response.versions.ic_content_display_web_version_product['git.commit.id.abbrev']);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_product.git.commit.id.full", xhr.response.versions.ic_content_display_web_version_product['git.commit.id.full']);
+
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_basket.git.build.com", xhr.response.versions.ic_content_display_web_version_basket['git.build.time'].replace("T", " "));
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_basket.git.build.version", xhr.response.versions.ic_content_display_web_version_basket['git.build.version']);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_basket.git.commit.id.abbrev", xhr.response.versions.ic_content_display_web_version_basket['git.commit.id.abbrev']);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version_basket.git.commit.id.full", xhr.response.versions.ic_content_display_web_version_basket['git.commit.id.full']);
+                    
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_tar_version", xhr.response.versions.ic_web_tar_version);
+
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_fe_secure_checkout_version", xhr.response.versions.ic_web_fe_secure_checkout_version);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version_pdp", xhr.response.versions.ic_web_front_end_version_pdp);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version_pmp", xhr.response.versions.ic_web_front_end_version_pmp);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version_basket", xhr.response.versions.ic_web_front_end_version_basket);
+                    document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version_myaccount", xhr.response.versions.ic_web_front_end_version_myaccount);
                 } 
                 else {
                     if (inputDomain.tries < 3) {
@@ -281,19 +293,31 @@ function step3GetEnvInfo(inputDomain) {
                         step3GetEnvInfo(inputDomain);
                     }
                     else {
+
+                        document.getElementById(detailID).style.display =  'block';
+
                         //Failed
                         console.log("Environment Version - Failed - " + inputDomain.domain);
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("Running...", "Took Error: " + status + " = " + xhr.statusText);
-
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_BUILDTIME_", "Error");
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSION_", "Error");
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_FRONTENDVERSIONSHARED_", "Error");
+  
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace(/Running.../g, "Took Error: " + status + " = " + xhr.statusText);
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.product.git.build.com", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.product.git.commit.id.abbrev", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.product.git.build.version", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.product.git.commit.id.full", "Error...");
     
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOICWEB_", "Error");
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_LEGACYCOSERVERDATE_", "Error");
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILDDATE_", "Error");
-                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("_NEWCOBUILD_", "Error");
- 
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.basket.git.build.com", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.basket.git.commit.id.abbrev", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.basket.git.build.version", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_content_display_web_version.basket.git.commit.id.full", "Error...");
+                        
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_tar_version", "Error...");
+    
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_fe_secure_checkout_version", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version.pdp", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version.pmp", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version.basket", "Error...");
+                        document.getElementById(docID).innerHTML = document.getElementById(docID).innerHTML.replace("versions.ic_web_front_end_version.myaccount", "Error...");
+    
                     }
                  }
             };        
