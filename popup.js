@@ -235,6 +235,7 @@ function step2ProcessURLs() {
                     }
                 }                
             });
+            document.getElementById("site-properties-link-" + domainToRun.domain).addEventListener ("click", function(){ httpLink("https://" + domainToRun.domain + "/api/site-properties") }); 
         }
     });
 
@@ -499,3 +500,13 @@ function step3GetEnvInfo(inputDomain) {
 
 }
 
+//Open link in a new window
+function httpLink(inputURI) {
+
+    chrome.windows.create ({
+        url: inputURI,
+        type: "popup"
+    });
+    //window.open(inputURI);
+    return false;
+}
