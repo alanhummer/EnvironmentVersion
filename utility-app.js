@@ -9,7 +9,7 @@ const https = require('https');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 
-app.listen(port, () => {  console.log(`Utility app listening at http://localhost:${port}/version - Options include: email, relay, filesave, version`)});
+app.listen(port, () => {  console.log(`Utility app listening at http://<domain>:${port}- Options include: test, email, relay, filesave, version`)});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -125,6 +125,13 @@ app.get('/relay', async function(req, res) {
         }
     }    
 });
+
+app.get('/test', async function(req, res) {
+    //End point for testing this
+    console.log("Doing Test Transaction");
+    res.send("Test Completed Successfully"); 
+});
+
 
 //HTTP call for loading a page
 function getPage(myURL, responseObject, action, actionObject, actionObjects, inputCookie) {
