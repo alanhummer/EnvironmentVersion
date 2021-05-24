@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const url = require('url');
 const querystring = require('querystring');
-const port = 3001;
+const port = 3000;
 const http = require('http');
 const https = require('https');
 const nodemailer = require('nodemailer');
@@ -129,7 +129,7 @@ app.get('/relay', async function(req, res) {
 app.get('/test', async function(req, res) {
     //End point for testing this
     console.log("Doing Test Transaction");
-    res.send("Test Completed Successfully"); 
+    res.send("Test Completed Successfully:" + TimeStamp(Date())); 
 });
 
 
