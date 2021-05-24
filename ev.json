@@ -1,19 +1,37 @@
 {
     "urlOfTester": "http://uslt103301.leinternal.com/getVersion2.asp?domain=_DOMAIN_",
-    "urlOfStatus": "http://uslt103301/proxy-relay.asp?relayURI=http%3A%2F%2Fleusnudev01%3A8080%2Fcheckout-status%3Fdays%3D0%26hours%3D24",
+    "urlOfStatus": "http://uslt103301/proxy-relay.asp?relayURI=http%3A%2F%2Fleusnudev01%3A8080%2Fcheckout-status%3Fdays%3D0%26hours%3D12",
     "manifestProd": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/prod/default.yml?at=refs%2Fheads%2Fmaster",
     "manifestQA": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/test/default.yml?at=refs%2Fheads%2Fmaster",
     "manifestDev": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/dev/default.yml?at=refs%2Fheads%2Fmaster",
+    "parkmycloudURI": "https:/_DOMAIN_/pps/static/assets/global-header/LE_COMFY_LOGO_DesktopNavy.svg",
     "domainsToGet": [
-        {"domain": "le-qasa-aws.landsend.com", "group": "AWS Release Stack", "runit": true, "doStatus": false},
-        {"domain": "le-devc-aws.landsend.com", "group": "AWS Release Stack", "runit": true, "doStatus": false},
-        {"domain": "le-deva-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": false},
-        {"domain": "le-deva2-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": false},
-        {"domain": "le-deva3-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": false},
-        {"domain": "le-deva4-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": false},
-        {"domain": "le-deva5-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": false},
-        {"domain": "www.landsend.com", "group": "Production Sites", "runit": true, "doStatus": false},
-        {"domain": "origin-aws-useast-1-www.landsend.com", "group": "Production Sites", "runit": true, "doStatus": false},
-        {"domain": "origin-aws-uswest-2-www.landsend.com", "group": "Production Sites", "runit": true, "doStatus": false}
-    ]
+        {"domain": "le-qasa-aws.landsend.com", "group": "AWS Release Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-qasa"},
+        {"domain": "le-intc-aws.landsend.com", "group": "AWS Release Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-intc"},
+        {"domain": "le-devc-aws.landsend.com", "group": "AWS Release Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devc"},
+        {"domain": "le-deva-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-deva"},
+        {"domain": "le-deva2-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-deva2"},
+        {"domain": "le-deva3-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-deva3"},
+        {"domain": "le-deva4-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-deva4"},
+        {"domain": "le-deva5-aws.landsend.com", "group": "AWS Dev A Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-deva5"},
+        {"domain": "le-devb1-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb1"},
+        {"domain": "le-devb2-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb2"},
+        {"domain": "le-devb3-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb3"},
+        {"domain": "le-devb4-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb4"},
+        {"domain": "le-devb5-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb5"},
+       {"domain": "www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"},
+        {"domain": "origin-aws-useast-1-www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"},
+        {"domain": "origin-aws-uswest-2-www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"}
+    ],
+    "statuses": [
+        {"number": 1, "name": "start"},
+        {"number": 2, "name": "add-new-sessn"},
+        {"number": 3, "name": "update-item"},
+        {"number": 4, "name": "start-co"},
+        {"number": 5, "name": "get-basket"},
+        {"number": 6, "name": "add-ship-to"},
+        {"number": 7, "name": "edit-bill-to"},
+        {"number": 8, "name": "place-order"},    
+        {"number": 9, "name": "order-confirm"}
+    ]      
 }

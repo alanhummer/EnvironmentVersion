@@ -16,6 +16,7 @@
 				font-weight: bold;	
 				font-size: 16px;
 				text-align: center;
+				display: inline-block;
 			}
 			.enabled-image {
 				opacity: 0.5;
@@ -37,87 +38,156 @@
 				width: 100%;
 				border: 0px;
 				text-align: left;
-				vertical-align: bottom;
+				vertical-align: top;
 			}
 			.issue-group {
 				padding: 10px;
-				width: 95%;
+				width: 550px;
 				border: 10px;
 				font-weight: bold;	
 				font-size: 16px;
 				text-align: left;
 				vertical-align: bottom;
 			}
-			.summary-class {
-				background-color:#D5DBDB;
-				color:red;
+			.summary-class-UP {
+				background-color:green;
 				display: inline-block; 
-				text-align:left;
+				text-align:center;
 				border:10px;
 				box-shadow: 1px 1px 2px #bbbbbb;
 				cursor: pointer;
 				padding: 10px;
-				width: 100%;
+				width: 550px;
+				height: 25px;
+				pointer-events: auto;
 			}
+			.summary-class-DOWN {
+				background-color:red;
+				display: inline-block; 
+				text-align:center;
+				border:10px;
+				box-shadow: 1px 1px 2px #bbbbbb;
+				cursor: pointer;
+				padding: 10px;
+				width: 550px;
+				height: 25px;
+				pointer-events: auto;
+			}
+			.summary-class-PARKED {
+				background-color:red;
+				display: inline-block; 
+				text-align:center;
+				border:10px;
+				box-shadow: 1px 1px 2px #bbbbbb;
+				cursor: pointer;
+				padding: 10px;
+				width: 550px;
+				height: 25px;
+				pointer-events: auto;
+			}
+			.button-text {
+				color: white;
+				font-weight: bold;	
+				font-size: 16x;
+				text-align: center;
+				vertical-align: center;				
+			}
+			.button-text:hover {
+				cursor: pointer;
+			}
+			.button-cell {
+				color: white;
+				font-weight: bold;	
+				font-size: 16px;
+				text-align: center;
+				vertical-align: center;
+				width: 150px;
+				height: 50px;
+			}		
+			.button-cell:hover {
+				cursor: pointer;
+			}	
+
+			.version-display {
+				height: 20px;	
+				padding: 10px;
+				color: blue;
+				font-weight: bold;	
+				font-size: 16px;
+				text-align: center;
+			}
+
+			.version-display:hover {
+				cursor: pointer;
+			}
+
+
 		</style>
 	</head>
 	<body>
 		<!--The Header Input Section -->
-		<div id="notice"></div>
-		<div id="header-input" class="header-display" style="display: inline-block;">
+		<div id="status-info" style="display:none;">
 			<div style="text-align:right;float:right;width: 750px;" id="nav">
-				<a  id="closeLink" target="_blank"><img id="close-image" class="enabled-image" style="float: right;" src="images/close_button.png" height="33" /></a>
+				<div id="header-message" class="header-display">This application gives you versioning and status information on our environments</div>&nbsp;<a id="closeLinkStatus" target="_blank"><img id="close-image-status" class="enabled-image" style="float: right;" src="images/close_button.png" height="33" /></a>
 			</div>
-			<div id="header-message">
+			<div id="output-report">
+				<div id="output-status"></div>
+				<div id="output-log"></div>
+			</div>
+
+			<!--Each group-->
+			<div id="output-_GROUP_" style="display:none;">
+				<div id="output-title-_GROUP_" class="issue-group">&nbsp;_GROUP_</div>
+				_DOMAINS_
+				<hr>
+			</div>
+			<!--End Group-->
+
+			<!--Each Domain-->
+			<div id="output-record-_DOMAIN_" style="display:none;" >
 				<table class="table-clean">
 					<tr>
-						<td style="text-align:center;width:100%">This application gives you versioning and status information on our environments</td>
+						<td class="button-cell" bgcolor="_ENVSTATUSCOLOR_"><div class="botton-text" id="site-link-_DOMAIN_">_DOMAINSHORT_</div></td>
+						<td class="button-cell" bgcolor="_ENVSTATUSCOLOR_"><div class="botton-text" id="pmc-link-_DOMAIN_">_PARKMYCLOUDSTATUS_</div></td>
+						<td class="button-cell" bgcolor="_ENVSTATUSCOLOR_"><div class="botton-text" id="status-link-_DOMAIN_">STATUS: _STATUSMESSAGE_</div></td>
+						<td class="button-cell" bgcolor="_PARKMYCLOUDSTATUSCOLOR_"><div class="botton-text" id="site-properties-link-_DOMAIN_">SITE PROPERTIES</div></td>
+						<td class="button-cell" bgcolor="_PARKMYCLOUDSTATUSCOLOR_"><div class="botton-text" id="version-detail-_DOMAIN_">VERSION INFO</div></td>
 					</tr>
 				</table>
-			</div><br>
-			<a  id="refresh" target="_blank" style="display:none"><img id="refresh-image" class="enabled-image" style="float: center;" src="images/click-to-refresh.png" height="33" /></a>
-		</div>
-		
-		<!--The Results Section -->
-		<div id="output-report">
-			<div id="output-status"></div>
-			<div id="output-log"></div>
-		</div>
-
-		<!--Each group-->
-		<div id="output-_GROUP_" style="display:none;">
-			<div id="output-title-_GROUP_" class="issue-group">&nbsp;_GROUP_</div>
-			_DOMAINS_
-			<hr>
-		</div>
-		<!--End Group-->
-
-		<!--Each Domain-->
-		<details closed id="output-record-_DOMAIN_"  class="issue-group" style="display:none;">
-			<summary id="output-summary-_DOMAIN_" class="summary-class" style="color:_ENVSTATUSCOLOR_">_DOMAIN_ _STATUSMESSAGE_ - <a id="site-properties-link-_DOMAIN_" target="_new"><u>Site Properties</u></a></summary>
-			<div id="output-details-_DOMAIN_" style="text-align:left; vertical-align:bottom;width:100%;">
-				<table cellpadding="5px" width="100%" style="display:none;">
-					<tr><td colspan="2">MANIFEST - _DOMAIN_ Running...</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#700707">Manifest:</td><td style="color:white;text-align:left;background-color:#700707"> _MANIFEST_</td></tr>
-					<tr><td colspan="2">PRODUCT - _DOMAIN_ Running...</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Time:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.build.time</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Version:</td><td style="color:white;text-align:left;background-color:#EC7063"><div id='_DOMAIN_.match.ic_content_display_web_version_product.git.build.version' style="display:inline-block"></div> versions.ic_content_display_web_version_product.git.build.version</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#EC7063">Commit Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.commit.id.abbrev / versions.ic_content_display_web_version_product.git.commit.id.full</td></tr>
-					<tr><td colspan="2">BASKET - _DOMAIN_ Running...</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Time:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.build.time</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"><div id='_DOMAIN_.match.ic_content_display_web_version_basket.git.build.version' style="display:inline-block"></div> versions.ic_content_display_web_version_basket.git.build.version</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Commit Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.commit.id.abbrev / versions.ic_content_display_web_version_basket.git.commit.id.full</td></tr>
-					<tr><td colspan="2">FRONT-END - _DOMAIN_ Running...</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">PDP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_pdp' style="display:inline-block"></div> versions.ic_web_front_end_version_pdp</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">PMP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_pmp' style="display:inline-block"></div> versions.ic_web_front_end_version_pmp</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">Basket Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_basket' style="display:inline-block"></div> versions.ic_web_front_end_version_basket</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#A569BD">My Account Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_myaccount' style="display:inline-block"></div> versions.ic_web_front_end_version_myaccount</td></tr>		
-					<tr><td colspan="2">MISC - _DOMAIN_ Running...</td></tr>
-					<tr><td style="color:white;text-align:right;background-color:#1e3ab4">FE Secure Checkout Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"><div id='_DOMAIN_.match.ic_web_fe_secure_checkout_version' style="display:inline-block"></div> versions.ic_web_fe_secure_checkout_version</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:#1e3ab4">IC_Web Tar Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"><div id='_DOMAIN_.match.ic_web_tar_version' style="display:inline-block"></div> versions.ic_web_tar_version</td></tr>		
-					<tr><td style="color:white;text-align:right;background-color:black">STATUS:</td><td style="color:white;text-align:left;background-color:black">_ENVSTATUS_ : _STATUSDATE_ </td></tr>					
-				</table>	
 			</div>
-		</details>
+		</div>
+
+		<!-- Version Info -->
+		<div id="version-info" class="version-display" style="display:none;">
+			<div style="text-align:right;float:right;width: 750px;" id="nav">
+				<div id="header-message-version" class="header-display">Loading.....</div>&nbsp;<a id="closeLinkStatus" target="_blank"><a  id="closeLinkVersion" target="_blank"><img id="close-image-version" class="enabled-image" style="float: right;" src="images/close_button.png" height="33" /></a>
+			</div>
+			<img id="hourglass-timer" style="display:none;"src="https://media.tenor.com/images/01c5a6c858fe2fa13a80bdbb8fdb2c22/tenor.gif">
+			<div id="version-info-details"></div>
+		</div>
+
+		<div id="version-info-table"  style="display:none;">
+			<table cellpadding="5px" width="750px">
+				<tr><td colspan="2">MANIFEST - _DOMAIN_ Running...</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#700707">Manifest:</td><td style="color:white;text-align:left;background-color:#700707"> _MANIFEST_</td></tr>
+				<tr><td colspan="2">PRODUCT - _DOMAIN_ Running...</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Time:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.build.time</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#EC7063">Build Version:</td><td style="color:white;text-align:left;background-color:#EC7063"><div id='_DOMAIN_.match.ic_content_display_web_version_product.git.build.version' style="display:inline-block"></div> versions.ic_content_display_web_version_product.git.build.version</td></tr>		
+				<tr><td style="color:white;text-align:right;background-color:#EC7063">Commit Version:</td><td style="color:white;text-align:left;background-color:#EC7063"> versions.ic_content_display_web_version_product.git.commit.id.abbrev / versions.ic_content_display_web_version_product.git.commit.id.full</td></tr>
+				<tr><td colspan="2">BASKET - _DOMAIN_ Running...</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Time:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.build.time</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Build Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"><div id='_DOMAIN_.match.ic_content_display_web_version_basket.git.build.version' style="display:inline-block"></div> versions.ic_content_display_web_version_basket.git.build.version</td></tr>		
+				<tr><td style="color:white;text-align:right;background-color:#7DCEA0">Commit Version:</td><td style="color:white;text-align:left;background-color:#7DCEA0"> versions.ic_content_display_web_version_basket.git.commit.id.abbrev / versions.ic_content_display_web_version_basket.git.commit.id.full</td></tr>
+				<tr><td colspan="2">FRONT-END - _DOMAIN_ Running...</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#A569BD">PDP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_pdp' style="display:inline-block"></div> versions.ic_web_front_end_version_pdp</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#A569BD">PMP Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_pmp' style="display:inline-block"></div> versions.ic_web_front_end_version_pmp</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#A569BD">Basket Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_basket' style="display:inline-block"></div> versions.ic_web_front_end_version_basket</td></tr>		
+				<tr><td style="color:white;text-align:right;background-color:#A569BD">My Account Version:</td><td style="color:white;text-align:left;background-color:#A569BD"><div id='_DOMAIN_.match.ic_web_front_end_version_myaccount' style="display:inline-block"></div> versions.ic_web_front_end_version_myaccount</td></tr>		
+				<tr><td colspan="2">MISC - _DOMAIN_ Running...</td></tr>
+				<tr><td style="color:white;text-align:right;background-color:#1e3ab4">FE Secure Checkout Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"><div id='_DOMAIN_.match.ic_web_fe_secure_checkout_version' style="display:inline-block"></div> versions.ic_web_fe_secure_checkout_version</td></tr>		
+				<tr><td style="color:white;text-align:right;background-color:#1e3ab4">IC_Web Tar Version:</td><td style="color:white;text-align:left;background-color:#1e3ab4"><div id='_DOMAIN_.match.ic_web_tar_version' style="display:inline-block"></div> versions.ic_web_tar_version</td></tr>		
+				<tr><td style="color:white;text-align:right;background-color:black">STATUS:</td><td style="color:white;text-align:left;background-color:black">_ENVSTATUS_ _STATUSDATE_ </td></tr>	
+			</table>
+		</div>
 	</body>
 </html>
