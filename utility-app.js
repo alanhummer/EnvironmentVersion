@@ -9,7 +9,7 @@ const https = require('https');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 
-app.listen(port, () => {  console.log(`Utility app listening at http://<domain>:${port}- Options include: test, email, relay, filesave, version`)});
+app.listen(port, () => {  console.log(`Utility app listening at http://<domain>:${port} - Options include: test, email, relay, filesave, version`)});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -49,6 +49,37 @@ app.post('/filesave', (req, res) => {
                 //Something failed..abort
                 console.log("Strange error in saveing file: " + backUp);
             }
+        }
+        else {
+            res.send("400 - Bad Request");
+        }     
+    } catch (err) {
+      console.error(err);
+      res.send(err);
+    }
+
+})
+
+app.get('/fileget', (req, res) => {
+    //Here get a file, usually used for configuration files in Alvis Time
+    try {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+        var fileToGet = query.filename;
+        console.log("FILE IS:", fileToGet);
+        if (fileToGet) {
+            var filePath = "OrgKeys/" + fileToGet;
+
+            //And now get the file
+            fs.readFile(filePath, 'utf8' , (err, data) => {
+                if (err) {
+                    res.send(err);
+                    return;
+                }
+                //We got it
+                console.log("Got file: " + filePath);
+                res.send(data);
+            });
         }
         else {
             res.send("400 - Bad Request");
