@@ -1,6 +1,13 @@
 {
-    "urlOfTester": "http://uslt103301.leinternal.com/getVersion2.asp?domain=_DOMAIN_",
-    "urlOfStatus": "http://uslt103301/proxy-relay.asp?relayURI=http%3A%2F%2Fleusnudev01%3A8080%2Fcheckout-status%3Fdays%3D0%26hours%3D12",
+    "EnvironmentVersion": {
+		"configUploadLocation": "http://leusnudev01.leinternal.com:8080/utility?action=filesave",
+		"upgradeDownloadLocation": "https://github.com/alanhummer/EnvironmentVersion/archive/refs/heads/master.zip",
+		"upgradeMessage": "We have a new version of Environment Versions!<br><br>_UPGRADEVERSION_<br><br>This version contains new stuff.  Go here to download and update your version.<br><br><a href='_DOWNLOADLOCATION_'>Click Here To Download</a>",
+		"upgradeRequired": true,
+		"upgradeVersion": "2021.05.26.2"
+	},
+    "urlOfVersion": "http://leusnudev01.leinternal.com:8080/utility?action=version&domain=_DOMAIN_",
+    "urlOfStatus": "http://leusnudev01.leinternal.com:8080/utility?action=relay&relayURI=http%3A%2F%2Fleusnudev01%3A8080%2Fcheckout-status%3Fdays%3D0%26hours%3D12",
     "manifestProd": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/prod/default.yml?at=refs%2Fheads%2Fmaster",
     "manifestQA": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/test/default.yml?at=refs%2Fheads%2Fmaster",
     "manifestDev": "https://source.landsend.com/projects/INTCORE/repos/ic-environment-manifests/raw/dev/default.yml?at=refs%2Fheads%2Fmaster",
@@ -19,7 +26,7 @@
         {"domain": "le-devb3-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb3"},
         {"domain": "le-devb4-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb4"},
         {"domain": "le-devb5-aws.landsend.com", "group": "AWS Dev B Stack", "runit": true, "doStatus": true, "parkmycloud": "ecomm-devb5"},
-       {"domain": "www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"},
+        {"domain": "www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"},
         {"domain": "origin-aws-useast-1-www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"},
         {"domain": "origin-aws-uswest-2-www.landsend.com", "group": "Production", "runit": true, "doStatus": false, "parkmycloud": "na"}
     ],
