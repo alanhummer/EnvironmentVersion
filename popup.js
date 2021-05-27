@@ -7,6 +7,13 @@ var statusArray;
 var blnStatusLoaded = false;
 var saveResponse;
 var environmentHTML = "";
+var version = "2021.05.26.2";
+var orgKeyLocation = "http://leusnudev01.leinternal.com:8080/utility?action=fileget&filename=_FILENAME_";
+
+//NEW VERSIONS TO GRAB
+//https://le-deva2-aws.landsend.com/api/autocomplete/actuator/info
+//https://le-deva2-aws.landsend.com/api/search/actuator/info
+
 
 //And so we begin....
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded, false);
@@ -23,13 +30,45 @@ function onDOMContentLoaded() {
     //Starting up, lets show it
     showSection("status-info");
 
-    loadConfig("ev.json", function(response) { 
+    //var configURL = ev.json
+    var configURL = orgKeyLocation.replace("_FILENAME_", "ev" + "-" + encodeURIComponent(version) + ".json");
+    var status = "";
+    loadConfig(configURL, function(returnStatus, response) { 
 
-        //Get all of our config parameters
-        config = JSON.parse(response); 
+        if (returnStatus == "fail") {
+            //Uh oh
+            document.getElementById("error-message").style.display="inline-block";
+            document.getElementById("error-message").innerHTML = document.getElementById("error-message").innerHTML.replace("_ERRORMESSAGE_", "There is a problem<br><br></br>Loading " + configURL + " = " + response);
+        }
+        else {
 
-        //Get our statuses first - it will kick off the others
-        step1LoadStatus();    
+            //Get all of our config parameters
+            config = JSON.parse(response);
+
+            console.log("WE HAVE THIS: " + config.EnvironmentVersion.upgradeVersion + " VS " + version);
+
+            //Handle Version
+            if (config.EnvironmentVersion.upgradeVersion != version) {
+
+                //New Version
+                document.getElementById("error-message").style.display="inline-block";
+                var versionMessage = config.EnvironmentVersion.upgradeMessage.replace("_UPGRADEVERSION_", config.EnvironmentVersion.upgradeVersion);
+                versionMessage = versionMessage.replace("_DOWNLOADLOCATION_", config.EnvironmentVersion.upgradeDownloadLocation);
+                document.getElementById("error-message").innerHTML = document.getElementById("error-message").innerHTML.replace("_ERRORMESSAGE_", versionMessage);
+                   
+   
+                //   "downloadLocation": "https://github.com/alanhummer/EnvironmentVersion/archive/refs/heads/master.zip",
+                //   "message": "We have a new version of Environment Versions! This version contains new stuff.",
+                   
+            }
+            else {
+
+                document.getElementById("error-message").style.display="none";
+
+                //Get our statuses first - it will kick off the others
+                step1LoadStatus();           
+            } 
+        } 
               
     });
 
@@ -44,19 +83,33 @@ function loadConfig(inputFileName, callback) {
 
         xobj.overrideMimeType("application/json");
         xobj.open('GET', inputFileName, true); 
-        xobj.onreadystatechange = function () {
-                if (xobj.readyState == 4 && xobj.status == "200") {
-                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-                    callback(xobj.responseText);
+        xobj.addEventListener("error", function() {console.log("Env Versions - failed - ");});
+        xobj.onload = function () {
+                if (xobj.status == "200") {
+                    //confirm it is not bogus
+                    if (!xobj.responseText.includes("EnvironmentVersion")) {
+                        callback("fail", xobj.responseText);
+                    }
+                    else {
+                        // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                        callback("success", xobj.responseText);
+                    }
+
                 }
                 else {
-                //    callback("");
+                    if (xobj.statusText) {
+                        callback("fail", xobj.status + " = " + xobj.statusText);
+                    }
+                    else {
+                        callback("fail", xobj.status);
+                    }
+
                 }
         };
         xobj.send(null);  
     }
     catch {
-        callback("");
+        callback("fail", "Took bad error");
     }
 }    
 
@@ -431,7 +484,7 @@ function step3GetEnvInfo(inputDomain) {
         inputDomain.gotEnvInfo = true;
 
         //Replace our tags
-        urlToRun = config.urlOfTester.replace("_DOMAIN_", inputDomain.domain);
+        urlToRun = config.urlOfVersion.replace("_DOMAIN_", inputDomain.domain);
 
         //Try to send
         try {
