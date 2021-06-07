@@ -11,7 +11,7 @@ var versionCompareOne = "";
 var versionCompareTwo = "";
 var saveResponse;
 var environmentHTML = "";
-var version = "2021.05.26.2";
+var version = "2021.06.07.1";
 var orgKeyLocation = "http://leusnudev01.leinternal.com:8080/utility?action=fileget&filename=_FILENAME_";
 
 //NEW VERSIONS TO GRAB
@@ -39,6 +39,7 @@ function onDOMContentLoaded() {
     var status = "";
     loadConfig(configURL, function(returnStatus, response) { 
 
+        document.getElementById("loading-message").style.display="none";
         if (returnStatus == "fail") {
             //Uh oh
             document.getElementById("error-message").style.display="inline-block";
@@ -85,7 +86,10 @@ function loadConfig(inputFileName, callback) {
 
         xobj.overrideMimeType("application/json");
         xobj.open('GET', inputFileName, true); 
-        xobj.addEventListener("error", function() {console.log("Env Versions - failed - ");});
+        xobj.addEventListener("error", function() {
+            console.log("Env Versions - failed - ");
+            callback("fail", "<br><br>Could not load.  Please make sure you are on the network and try again.");
+        });
         xobj.onload = function () {
                 if (xobj.status == "200") {
                     //confirm it is not bogus
