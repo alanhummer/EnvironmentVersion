@@ -5,6 +5,10 @@ var config;  //object that will hold all configuration options
 var blnStatusLoaded = false;
 var statusArray;
 var blnStatusLoaded = false;
+var domainCompareOne = "";
+var domainCompareTwo = "";
+var versionCompareOne = "";
+var versionCompareTwo = "";
 var saveResponse;
 var environmentHTML = "";
 var version = "2021.05.26.2";
@@ -44,8 +48,6 @@ function onDOMContentLoaded() {
 
             //Get all of our config parameters
             config = JSON.parse(response);
-
-            console.log("WE HAVE THIS: " + config.EnvironmentVersion.upgradeVersion + " VS " + version);
 
             //Handle Version
             if (config.EnvironmentVersion.upgradeVersion != version) {
@@ -183,7 +185,7 @@ function step1LoadStatus(inputDomain) {
 
                 //We now have most recent per host, so spit em out
                 statusArray.forEach(function(statusElement) {
-                    console.log("STATUS FOR:", statusElement);
+
                     loadStepNumber(statusElement);
                     //And convert to cst
                     statusElement.insertDate = convertToCentralTime(statusElement.insertDate);
@@ -228,7 +230,7 @@ function loadParkMyCloudStatus(domainToRun) {
         xhr.addEventListener("error", function() {console.log("Park My Cloud status failed");});
         xhr.onload = function() {
             var status = xhr.status;
-            console.log("PMC GOT ONE: " + status + " FOR: " + domainToRun.domain);
+           
             if (status == 503) {
                 //This is parked
                 myResponse = "PARKED";
@@ -250,6 +252,9 @@ function loadParkMyCloudStatus(domainToRun) {
             document.getElementById("site-properties-link-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("site-properties-link-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUS_/gi, myResponse);
             document.getElementById("site-link-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("site-link-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUS_/gi, myResponse);
  
+            document.getElementById("property-compare-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("property-compare-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUS_/gi, myResponse);
+            document.getElementById("version-compare-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("version-compare-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUS_/gi, myResponse);
+            
             document.getElementById("output-record-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("output-record-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUS_/gi, myResponse);
 
             document.getElementById("output-record-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML = document.getElementById("output-record-_DOMAIN_".replace(/_DOMAIN_/gi, domainToRun.domain)).outerHTML.replace(/_PARKMYCLOUDSTATUSCOLOR_/gi, myResponseColor);
@@ -536,7 +541,6 @@ function step3GetEnvInfo(inputDomain) {
 //Open link in a new window
 function httpLink(inputURI, inputType, inputDomain) {
 
-    console.log("DID LINK:" + inputURI);
     chrome.windows.create ({
         url: inputURI,
         type: inputType
@@ -633,14 +637,92 @@ function sleep(inputMS) {
 
 function setupLinks(domainToRun) {
     
-    console.log("SETUP LINKS: " + domainToRun.domain);
-
     if (!!document.getElementById("site-properties-link-" + domainToRun.domain).onclick) {
         //Skip it
     }
     else {
         document.getElementById("site-properties-link-" + domainToRun.domain).onclick = function () {
             httpLink("https://" + domainToRun.domain + "/api/site-properties", "popup", domainToRun.domain);
+        }      
+    }
+
+    if (!!document.getElementById("property-compare-" + domainToRun.domain).onclick) {
+        //Skip it
+    }
+    else {
+        document.getElementById("property-compare-" + domainToRun.domain).onclick = function () {
+
+            if (document.getElementById("property-compare-" + domainToRun.domain).src.includes("images/compare.png")) {
+                //do our first
+                if (domainCompareOne != "") {
+                    if (domainCompareTwo != "") {
+                        //Clear this out
+                        document.getElementById("property-compare-" + domainCompareTwo).src = "images/compare.png";
+                    }
+                    document.getElementById("property-compare-" + domainToRun.domain).src = "images/compare_selected_2.png";
+                    domainCompareTwo = domainToRun.domain;
+                }
+                else {
+                    document.getElementById("property-compare-" + domainToRun.domain).src = "images/compare_selected_1.png";
+                    domainCompareOne = domainToRun.domain;
+                }
+                if (domainCompareOne != "" && domainCompareTwo != "" && domainCompareOne != domainCompareTwo) {
+                    //Here we kick of off
+                    httpLink("diff.html?compareType=properties&domain1=" + domainCompareOne + "&domain2=" + domainCompareTwo, "popup", null);
+                }
+            }
+            else {
+                //Already compared, so 
+                document.getElementById("property-compare-" + domainToRun.domain).src = "images/compare.png";
+                if (domainCompareOne == domainToRun.domain) {
+                    domainCompareOne = "";
+                }
+                else {
+                    if (domainCompareTwo == domainToRun.domain) {
+                        domainCompareTwo = "";
+                    }
+                }
+            }
+        }      
+    }
+
+    if (!!document.getElementById("version-compare-" + domainToRun.domain).onclick) {
+        //Skip it
+    }
+    else {
+        document.getElementById("version-compare-" + domainToRun.domain).onclick = function () {
+
+            if (document.getElementById("version-compare-" + domainToRun.domain).src.includes("images/compare.png")) {
+                //do our first
+                if (versionCompareOne != "") {
+                    if (versionCompareTwo != "") {
+                        //Clear this out
+                        document.getElementById("version-compare-" + versionCompareTwo).src = "images/compare.png";
+                    }
+                    document.getElementById("version-compare-" + domainToRun.domain).src = "images/compare_selected_2.png";
+                    versionCompareTwo = domainToRun.domain;
+                }
+                else {
+                    document.getElementById("version-compare-" + domainToRun.domain).src = "images/compare_selected_1.png";
+                    versionCompareOne = domainToRun.domain;
+                }
+                if (versionCompareOne != "" && versionCompareTwo != "" && versionCompareOne != versionCompareTwo) {
+                    //Here we kick of off
+                    httpLink("diff.html?compareType=version&domain1=" + versionCompareOne + "&domain2=" + versionCompareTwo, "popup", null);
+                }
+            }
+            else {
+                //Already compared, so 
+                document.getElementById("version-compare-" + domainToRun.domain).src = "images/compare.png";
+                if (versionCompareOne == domainToRun.domain) {
+                    versionCompareOne = "";
+                }
+                else {
+                    if (versionCompareTwo == domainToRun.domain) {
+                        versionCompareTwo = "";
+                    }
+                }
+            }
         }      
     }
 
