@@ -326,30 +326,50 @@ function step2ProcessURLs() {
                             domainToRun.statusStepNumberDesc = statusElement.stepNumberDesc;
                             domainToRun.statusStepNumber = statusElement.status;
                             domainToRun.statusDate = statusElement.insertDate;
-                            outputDomain = outputDomain.replace(/_ENVSTATUS_/gi, statusElement.stepNumberDesc + "<br>" + statusElement.status + " as of<br>" + statusElement.insertDate);
-                            outputDomain = outputDomain.replace(/_STATUSDATE_/gi, statusElement.insertDate);
                             switch (statusElement.stepNumber) {
                                 case 1:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#E00E00");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 2:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#C41C00");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 3:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#A82A00");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 4:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#8C3800");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 5:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#704600");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 6:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#545400");
+                                    statusElement.stepNumberDesc = "STRUGGLING: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 7:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#386200");
+                                    statusElement.stepNumberDesc = "STRUGGLING: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 8:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#1C7000"); 
+                                    statusElement.stepNumberDesc = "VERY GOOD: " + statusElement.stepNumberDesc;
+                                    break;
                                 case 9:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#008000");
+                                    statusElement.stepNumberDesc = "PERFECT: " + statusElement.stepNumberDesc;
+                                    break;
                                 default:
                                     outputDomain = outputDomain.replace(/_ENVSTATUSCOLOR_/gi, "#FF0000");
+                                    statusElement.stepNumberDesc = "TERRIBLE: " + statusElement.stepNumberDesc;
+                                    break;
                             }
+                            outputDomain = outputDomain.replace(/_ENVSTATUS_/gi, statusElement.stepNumberDesc + "<br>" + statusElement.status + "<br>" + statusElement.insertDate);
+                            outputDomain = outputDomain.replace(/_STATUSDATE_/gi, statusElement.insertDate);
                         }
                     }
                 });
